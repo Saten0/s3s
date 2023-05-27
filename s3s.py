@@ -3,6 +3,7 @@
 # Based on splatnet2statink (ↄ) 2017-2023 eli fessler (frozenpandaman), clovervidia
 # https://github.com/frozenpandaman/s3s
 # License: GPLv3
+#
 
 import argparse, base64, datetime, json, os, shutil, re, requests, sys, time, uuid
 from concurrent.futures import ThreadPoolExecutor
