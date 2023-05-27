@@ -10,6 +10,7 @@ from subprocess import call
 import msgpack
 from packaging import version
 import iksm, utils
+import pandas as pd
 
 A_VERSION = "0.4.1"
 
@@ -1131,7 +1132,7 @@ def prepare_job_result(job, ismonitoring, isblackout, overview_data=None, prevre
 		14: "nabebuta",
 		15: "kin_shake",
 		17: "grill",
-		20: "doro_shake"
+		20: "doro_shake",
 	}
 	for boss in job["enemyResults"]:
 		boss_id  = utils.b64d(boss["enemy"]["id"])
@@ -1162,6 +1163,20 @@ def prepare_job_result(job, ismonitoring, isblackout, overview_data=None, prevre
 	payload["splatnet_json"] = json.dumps(job)
 	payload["automated"] = "yes"
 
+	df_read = pd.read_csv("defeated.csv",index_col=0,header=None,encoding="UTF_8_sig")
+	for i,boss in enumerate(job["enemyResults"]):
+		boss_id  = utils.b64d(boss["enemy"]["id"])
+		boss_key = translate_boss[boss_id]
+		df_read.loc[boss_key,df_read.columns[1]] = df_read.loc[boss_key,df_read.columns[1]] + (bosses[boss_key])["defeated_by_me"]
+	if job["bossResult"]:
+		if payload["clear_extra"] == "yes":
+			if payload["king_salmonid"] == 23:
+				df_read.iloc[14,1] = df_read.iloc[14,1] + 1
+			elif payload["king_salmonid"] == 24:
+				df_read.iloc[15,1] = df_read.iloc[15,1] + 1
+	print("OK")
+	df_read.to_csv('./defeated.csv',header=None,encoding = "UTF_8_sig")
+ 
 	return payload
 
 
