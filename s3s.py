@@ -1132,7 +1132,7 @@ def prepare_job_result(job, ismonitoring, isblackout, overview_data=None, prevre
 		14: "nabebuta",
 		15: "kin_shake",
 		17: "grill",
-		20: "doro_shake",
+		20: "doro_shake"
 	}
 	for boss in job["enemyResults"]:
 		boss_id  = utils.b64d(boss["enemy"]["id"])
